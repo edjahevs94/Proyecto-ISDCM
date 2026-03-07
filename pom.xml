@@ -6,7 +6,7 @@
     <version>1.0</version>
     <packaging>war</packaging>
     <name>Proyecto-ISDCM-1.0</name>
-    
+
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -14,7 +14,7 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee>9.1.0</jakartaee>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>jakarta.platform</groupId>
