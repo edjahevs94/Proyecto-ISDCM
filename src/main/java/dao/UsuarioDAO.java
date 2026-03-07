@@ -13,7 +13,7 @@ import util.ConexionBD;
 
 public class UsuarioDAO {
     
-    public boolean loginUsuario(String username, String password) throws SQLException{
+    public boolean loginUsuario(Usuario usuario) throws SQLException{
         
         boolean res = false;
            
@@ -22,8 +22,8 @@ public class UsuarioDAO {
             String sql = "SELECT 1 WHERE username = ? AND password = ?";
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(1, usuario.getUserName());
+            ps.setString(2, usuario.getPassword());
             
             ResultSet rs = ps.executeQuery();
             

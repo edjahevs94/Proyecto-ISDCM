@@ -5,6 +5,7 @@
 package controlador;
 
 import dao.UsuarioDAO;
+import modelo.Usuario;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,17 +27,20 @@ public class ServletLogin extends HttpServlet {
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        
         UsuarioDAO dao = new UsuarioDAO();
+        Usuario usuario = new Usuario();
+        usuario.setUserName(username);
+        usuario.setPassword(password);
 
         try {
-            if (dao.loginUsuario(username, password)) {
+            if (dao.loginUsuario(usuario)) {
                 
                 HttpSession session = request.getSession();
                 session.setAttribute("usuario", username);
                 session.setMaxInactiveInterval(120);
                 
-                // Esta es la ruta a la que se tiene accesso
+                // TODO: Esta es la ruta que debe de recireccionar a la lista o registro de los videos
                 response.sendRedirect("dashboard.jsp");
                 
             } else {
