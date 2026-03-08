@@ -5,7 +5,7 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="java.util.List, proyecto.isdcm.models.Video" %>
+<%@ page import="java.util.List, modelo.Video" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
