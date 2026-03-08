@@ -29,7 +29,7 @@ public class ServletListadoVid extends HttpServlet {
         // Verificar sesión activa
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("sessionExpirada.jsp");
             return;
         }
 

@@ -18,12 +18,13 @@ public class Video {
     private int reproducciones;
     private String descripcion;
     private String formato;
+    private String rutaFichero;
 
     public Video() {}
 
     public Video(String titulo, String autor, String fechaCreacion,
                  String duracion, int reproducciones,
-                 String descripcion, String formato) {
+                 String descripcion, String formato, String rutaFichero) {
         this.titulo        = titulo;
         this.autor         = autor;
         this.fechaCreacion = fechaCreacion;
@@ -31,6 +32,7 @@ public class Video {
         this.reproducciones = reproducciones;
         this.descripcion   = descripcion;
         this.formato       = formato;
+        this.rutaFichero = rutaFichero;
     }
 
     // Getters y Setters
@@ -59,4 +61,14 @@ public class Video {
 
     public String getFormato()                { return formato; }
     public void setFormato(String formato)    { this.formato = formato; }
+
+    public String getRutaFichero() {
+        return rutaFichero;
+    }
+
+    public void setRutaFichero(String rutaFichero) {
+        this.rutaFichero = rutaFichero;
+    }
+    
+    
 }

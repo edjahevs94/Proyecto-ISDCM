@@ -156,6 +156,20 @@
                     <textarea class="form-control" name="descripcion" rows="3"
                               placeholder="Describe brevemente el contenido del vídeo...">${param.descripcion}</textarea>
                 </div>
+                  <div class="mb-3">
+                        <label class="form-label fw-semibold small text-secondary">
+                            Ruta o URL del fichero
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-link-45deg text-secondary"></i>
+                            </span>
+                            <input type="text" class="form-control" name="rutaFichero"
+                                   placeholder="Ej: /videos/mivideo.mp4 o https://..."
+                                   value="${param.rutaFichero}"/>
+                        </div>
+                        <div class="form-text">Puede ser una ruta local o una URL externa.</div>
+                    </div>
 
                 <hr class="mb-4"/>
 
@@ -165,7 +179,7 @@
                         <i class="bi bi-cloud-upload me-1"></i> Registrar vídeo
                     </button>
                 </div>
-
+                
             </form>
         </div>
     </div>

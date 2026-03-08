@@ -33,8 +33,8 @@ public class VideoDAO {
         // Comprobar si ya existe un vídeo con el mismo título y autor
         String sqlCheck = "SELECT ID FROM Videos WHERE Titulo = ? AND Autor = ?";
         String sqlInsert = "INSERT INTO Videos (Titulo, Autor, \"Fecha creacion\", " +
-                           "Duracion, Reproducciones, Descripcion, Formato) " +
-                           "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                   "Duracion, Reproducciones, Descripcion, Formato, RutaFichero) " +
+                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = ConexionBD.getConnection();) {
 
@@ -56,6 +56,7 @@ public class VideoDAO {
             psInsert.setInt(5, v.getReproducciones());
             psInsert.setString(6, v.getDescripcion());
             psInsert.setString(7, v.getFormato());
+            psInsert.setString(8, v.getRutaFichero());
             psInsert.executeUpdate();
 
             return null; // éxito
@@ -86,6 +87,7 @@ public class VideoDAO {
                 v.setReproducciones(rs.getInt("Reproducciones"));
                 v.setDescripcion(rs.getString("Descripcion"));
                 v.setFormato(rs.getString("Formato"));
+                v.setRutaFichero(rs.getString("RutaFichero"));
                 lista.add(v);
             }
 

@@ -25,7 +25,7 @@ public class Servletregistrovid extends HttpServlet {
         // Verificar sesión activa
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("sessionExpirada.jsp");
             return;
         }
 
@@ -40,7 +40,7 @@ public class Servletregistrovid extends HttpServlet {
         // Verificar sesión activa
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("sessionExpirada.jsp");
             return;
         }
 
@@ -54,6 +54,7 @@ public class Servletregistrovid extends HttpServlet {
         String reproStr     = request.getParameter("reproducciones")!= null? request.getParameter("reproducciones").trim(): "0";
         String descripcion  = request.getParameter("descripcion")  != null ? request.getParameter("descripcion").trim()  : "";
         String formato      = request.getParameter("formato")      != null ? request.getParameter("formato").trim()      : "";
+        String rutaFichero   = request.getParameter("rutaFichero")     != null ? request.getParameter("rutaFichero").trim()     : "";
 
         // --- Validaciones ---
 
@@ -89,9 +90,21 @@ public class Servletregistrovid extends HttpServlet {
             request.getRequestDispatcher("registroVid.jsp").forward(request, response);
             return;
         }
+        
+        // Validar formato de URL si se ha introducido (no es obligatorio)
+        if (!rutaFichero.isEmpty()) {
+            boolean esUrlValida = rutaFichero.startsWith("http://") 
+                               || rutaFichero.startsWith("https://")
+                               || rutaFichero.startsWith("/");
+            if (!esUrlValida) {
+                request.setAttribute("error", "La ruta del fichero debe ser una URL (http/https) o una ruta local que empiece por /");
+                request.getRequestDispatcher("registroVid.jsp").forward(request, response);
+                return;
+            }
+        }
 
         // Crear objeto Video y guardar
-        Video v = new Video(titulo, autor, fecha, duracion, reproducciones, descripcion, formato);
+        Video v = new Video(titulo, autor, fecha, duracion, reproducciones, descripcion, formato, rutaFichero);
         VideoDAO dao = new VideoDAO();
         String errorDB = dao.insertarVideo(v);
 
