@@ -41,7 +41,7 @@ public class ServletLogin extends HttpServlet {
                 session.setMaxInactiveInterval(120);
                 
                 // TODO: Esta es la ruta que debe de recireccionar a la lista o registro de los videos
-                response.sendRedirect("dashboard.jsp");
+                response.sendRedirect("servletRegistroVid");
                 
             } else {
                 response.sendRedirect("login.jsp?error=login_incorrecto");

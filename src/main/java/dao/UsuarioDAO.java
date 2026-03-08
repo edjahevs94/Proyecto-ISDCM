@@ -13,32 +13,24 @@ import util.ConexionBD;
 
 public class UsuarioDAO {
     
-    public boolean loginUsuario(Usuario usuario) throws SQLException{
-        
-        boolean res = false;
-           
-        try{
-            Connection conn = ConexionBD.getConnection();
-            String sql = "SELECT 1 WHERE username = ? AND password = ?";
-
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, usuario.getUserName());
-            ps.setString(2, usuario.getPassword());
-            
-            ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
-                res = true;
-            }
-        
-        
-        } catch(SQLException e){
-            e.printStackTrace();
+    public boolean loginUsuario(Usuario usuario) throws SQLException {
+    boolean res = false;
+    try {
+        Connection conn = ConexionBD.getConnection();
+        String sql = "SELECT 1 FROM USUARIOS WHERE USERNAME = ? AND PASSWORD = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, usuario.getUserName());
+        ps.setString(2, usuario.getPassword());
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            res = true;
         }
-        
-        return res;
-        
+        conn.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return res;
+}
     
     public boolean insertarUsuario(Usuario usuario){
 

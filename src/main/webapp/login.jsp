@@ -53,7 +53,7 @@
     </div>
     <% } %>
 
-    <form action="LoginServlet" method="post">
+    <form action="servletLogin" method="post">
 
         <div class="mb-3">
                 <label class="form-label fw-medium text-secondary small">
