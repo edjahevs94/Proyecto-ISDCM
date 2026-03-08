@@ -40,11 +40,11 @@ public class ServletLogin extends HttpServlet {
                 session.setAttribute("usuario", username);
                 session.setMaxInactiveInterval(120);
                 
-                // TODO: Esta es la ruta que debe de recireccionar a la lista o registro de los videos
                 response.sendRedirect("servletRegistroVid");
                 
             } else {
-                response.sendRedirect("login.jsp?error=login_incorrecto");
+                request.setAttribute("error", "Usuario o contraseña incorrecto.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ServletLogin.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,15 +9,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
-<script>
-    const params = new URLSearchParams(window.location.search);
-    var res = params.get("message");
-    
-    if(res){
-        alert(res);
-    }
-</script>
-
 </head>
 
     <body class="bg-light min-vh-100 d-flex align-items-center justify-content-center py-4">
@@ -43,13 +34,6 @@
     <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
     <i class="bi bi-exclamation-triangle-fill"></i>
     <span>${error}</span>
-    </div>
-    <% } %>
-
-    <% if (request.getAttribute("exito") != null) { %>
-    <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
-    <i class="bi bi-check-circle-fill"></i>
-    <span>${exito}</span>
     </div>
     <% } %>
 

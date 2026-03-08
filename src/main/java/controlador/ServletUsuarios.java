@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 @WebServlet(name = "servletUsuarios", urlPatterns = {"/servletUsuarios"})
 public class ServletUsuarios extends HttpServlet {
@@ -29,24 +28,38 @@ public class ServletUsuarios extends HttpServlet {
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        String repeat_password = request.getParameter("repeatPassword");
+        
         if (name == null || name.isEmpty() ||
             email == null || email.isEmpty() ||
             username == null || username.isEmpty() ||
             password == null || password.isEmpty() ||
             lastname == null || lastname.isEmpty())
             {
-
-            response.sendRedirect("registroUsu.jsp?error=campos_vacios");
+            
+            request.setAttribute("error", "Todos los campos marcados con * son obligatorios.");
+            request.getRequestDispatcher("registroUsu.jsp").forward(request, response);
             return;
         }
-
+        
         UsuarioDAO dao = new UsuarioDAO();
         String res = dao.validateFields(email,username);
-
-        if (!"Usuario Registrado Correctamente".equals(res)) {
-            // Usar encode para evitar problemas con caracteres especiales
-            response.sendRedirect("registroUsu.jsp?error=" + URLEncoder.encode(res, "UTF-8"));
+        
+        if(!(repeat_password.equals(password))) {
+            request.setAttribute("error", "La contraseñas son diferentes.");
+            request.getRequestDispatcher("registroUsu.jsp").forward(request, response);
+            return;
+        }
+        
+        if ("email".equals(res)){
+            request.setAttribute("error", "El email ya esta en uso.");
+            request.getRequestDispatcher("registroUsu.jsp").forward(request, response);
+            return;
+        }
+        
+        if("username".equals(res)){
+            request.setAttribute("error", "El username ya esta en uso.");
+            request.getRequestDispatcher("registroUsu.jsp").forward(request, response);
             return;
         }
 
@@ -64,12 +77,11 @@ public class ServletUsuarios extends HttpServlet {
 
         try {
             dao.insertarUsuario(usuario);
-
-            response.sendRedirect("login.jsp?message=Registro Exitoso");
+            response.sendRedirect("registroExitoso.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("registro.jsp?error=falla_insercion");
+            response.sendRedirect("registroUsu.jsp");
         }
     }
 }

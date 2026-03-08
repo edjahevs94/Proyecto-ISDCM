@@ -15,8 +15,7 @@ public class UsuarioDAO {
     
     public boolean loginUsuario(Usuario usuario) throws SQLException {
     boolean res = false;
-    try {
-        Connection conn = ConexionBD.getConnection();
+    try(Connection conn = ConexionBD.getConnection()) {
         String sql = "SELECT 1 FROM USUARIOS WHERE USERNAME = ? AND PASSWORD = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, usuario.getUserName());
@@ -79,10 +78,10 @@ public class UsuarioDAO {
 
             while (rs.next()) {
                 if (email.equals(rs.getString("email"))) {
-                    resultado = "El Email ya esta en uso";
+                    resultado = "email";
                 }
                 if (username.equals(rs.getString("username"))) {
-                    resultado = "El Username ya esta en uso";
+                    resultado = "username";
                 }
             }
 
