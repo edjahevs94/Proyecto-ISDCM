@@ -10,6 +10,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Sesión expirada</title>
+    <script src="js/sessionExpirada.js" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 </head>
@@ -38,19 +39,6 @@
     </div>
 </div>
 <div class="modal-backdrop fade show"></div>
-
-<script>
-    let segundos = 5;
-    const cuenta = document.getElementById("cuenta");
-    const intervalo = setInterval(() => {
-        segundos--;
-        cuenta.textContent = segundos;
-        if (segundos <= 0) {
-            clearInterval(intervalo);
-            window.location.href = "login.jsp";
-        }
-    }, 1000);
-</script>
 
 </body>
 </html>

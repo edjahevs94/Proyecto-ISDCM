@@ -4,19 +4,10 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Usuario Registrado</title>
+    <script src="js/registroExitoso.js" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
-       
-    <style>
-        body {
-            opacity: 1;
-            transition: opacity 0.6s ease;
-        }
-
-        body.fade-out {
-            opacity: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="css/registroExitoso.css"/>
     
 </head>
 
@@ -43,15 +34,6 @@
 
 <div class="modal-backdrop fade show"></div>
 
-<script>
-    setTimeout(() => {
-        document.body.classList.add("fade-out");
-
-        setTimeout(() => {
-            window.location.href = "login.jsp";
-        }, 600);
-    }, 2000);
-</script>
 
 </body>
 </html>
