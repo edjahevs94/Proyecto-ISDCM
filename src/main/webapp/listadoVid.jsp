@@ -19,17 +19,40 @@
 
         <div class="container">
 
+            <!-- Usuario -->                    
+            <div class="text-end mb-3">
+
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-secondary rounded-circle fw-bold"
+                            data-bs-toggle="dropdown"
+                            style="width:50px;height:50px;">
+                        ${sessionScope.usuario}
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item text-danger" href="ServletLogout">
+                                <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
+                
                 <div>
                     <h3 class="fw-bold mb-0">
                         <i class="bi bi-collection-play text-primary me-2"></i>Listado de Vídeos
                     </h3>
-                    <small class="text-muted">Usuario: <strong>${sessionScope.usuario}</strong></small>
                 </div>
+                
                 <a href="servletRegistroVid" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Registrar vídeo
                 </a>
+                
             </div>
 
             <!-- Tabla -->

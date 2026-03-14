@@ -17,6 +17,28 @@
 <body class="bg-light min-vh-100 d-flex align-items-center justify-content-center py-4">
 
 <div class="container" style="max-width:700px;">
+    
+    
+    <!-- Usuario -->                    
+    <div class="text-end mb-3">
+
+        <div class="dropdown d-inline-block">
+            <button class="btn btn-secondary rounded-circle fw-bold"
+                    data-bs-toggle="dropdown"
+                    style="width:50px;height:50px;">
+                ${sessionScope.usuario}
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item text-danger" href="ServletLogout">
+                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
 
     <div class="card border-0 shadow-sm rounded-3">
 
@@ -26,9 +48,6 @@
                 <i class="bi bi-camera-video-fill fs-4"></i>
                 <div>
                     <h4 class="mb-0 fw-bold">Registrar Vídeo</h4>
-                    <small class="opacity-75">
-                        Usuario: <strong>${sessionScope.usuario}</strong>
-                    </small>
                 </div>
                 <a href="servletListadoVid" class="btn btn-outline-light btn-sm ms-auto">
                     <i class="bi bi-list-ul me-1"></i>Ver listado
