@@ -94,4 +94,18 @@ public class UsuarioDAO {
     }
     
     
+    public int getIdByUsername(String username) throws SQLException {
+    String sql = "SELECT ID FROM USUARIOS WHERE USERNAME = ?";
+    try (Connection con = ConexionBD.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("ID");
+        }
+    }
+    return -1;
+}
+    
+    
 }

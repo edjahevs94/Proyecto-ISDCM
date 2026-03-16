@@ -20,6 +20,10 @@ public class Video {
     private String formato;
     private String rutaFichero;
 
+    private int usuarioId;
+
+
+    
     public Video() {}
 
     public Video(String titulo, String autor, String fechaCreacion,
@@ -36,6 +40,14 @@ public class Video {
     }
 
     // Getters y Setters
+    
+    public int getUsuarioId() { 
+        return usuarioId; 
+    }
+    public void setUsuarioId(int usuarioId) { 
+        this.usuarioId = usuarioId;
+    }
+    
     public int getId(){ 
         return id; 
     }

@@ -32,10 +32,10 @@ public class ServletListadoVid extends HttpServlet {
             response.sendRedirect("sessionExpirada.jsp");
             return;
         }
-
+        int usuarioId = (int) session.getAttribute("usuarioId");
         // Obtener lista de vídeos y pasar a la vista
         VideoDAO dao = new VideoDAO();
-        List<Video> lista = dao.listarVideos();
+        List<Video> lista = dao.listarVideos(usuarioId);
         request.setAttribute("videos", lista);
         request.getRequestDispatcher("listadoVid.jsp").forward(request, response);
     }

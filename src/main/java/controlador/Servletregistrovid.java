@@ -104,8 +104,11 @@ public class Servletregistrovid extends HttpServlet {
         }
 
         // Crear objeto Video y guardar
+        int usuarioId = (int) session.getAttribute("usuarioId");
+        
         Video v = new Video(titulo, autor, fecha, duracion, reproducciones, descripcion, formato, rutaFichero);
         VideoDAO dao = new VideoDAO();
+        v.setUsuarioId(usuarioId);
         String errorDB = dao.insertarVideo(v);
 
         if (errorDB != null) {
