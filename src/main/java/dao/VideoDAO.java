@@ -25,20 +25,16 @@ import static util.ConexionBD.getConnection;
 public class VideoDAO {
 
 
-    /**
-     * Inserta un vídeo en la BD.
-     * @return null si fue correcto, o mensaje de error si falló.
-     */
+
     public String insertarVideo(Video v) {
-        // Comprobar si ya existe un vídeo con el mismo título y autor
+        // comprobar si ya existe un vídeo con el mismo título y autor
         String sqlCheck = "SELECT ID FROM Videos WHERE Titulo = ? AND Autor = ?";
-        String sqlInsert = "INSERT INTO Videos (Titulo, Autor, \"Fecha creacion\", " +
+        String sqlInsert = "INSERT INTO Videos (Titulo, Autor, Fecha_creacion, " +
                    "Duracion, Reproducciones, Descripcion, Formato, RutaFichero, UsuarioId) " +
                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = ConexionBD.getConnection();) {
 
-            // 1. Comprobar duplicado
             PreparedStatement psCheck = con.prepareStatement(sqlCheck);
             psCheck.setString(1, v.getTitulo());
             psCheck.setString(2, v.getAutor());
@@ -47,7 +43,6 @@ public class VideoDAO {
                 return "Ya existe un vídeo con ese título y autor.";
             }
 
-            // 2. Insertar
             PreparedStatement psInsert = con.prepareStatement(sqlInsert);
             psInsert.setString(1, v.getTitulo());
             psInsert.setString(2, v.getAutor());
@@ -60,16 +55,14 @@ public class VideoDAO {
             psInsert.setInt(9, v.getUsuarioId());
             psInsert.executeUpdate();
 
-            return null; // éxito
+            return "creado_exitosamente"; 
 
         } catch (SQLException e) {
             return "Error en la base de datos: " + e.getMessage();
         }
     }
 
-    /**
-     * Devuelve todos los vídeos de la BD.
-     */
+    
     public List<Video> listarVideos(int usuarioId) {
     List<Video> lista = new ArrayList<>();
     String sql = "SELECT * FROM Videos WHERE UsuarioId = ?";
@@ -84,7 +77,7 @@ public class VideoDAO {
             v.setId(rs.getInt("ID"));
             v.setTitulo(rs.getString("Titulo"));
             v.setAutor(rs.getString("Autor"));
-            v.setFechaCreacion(rs.getDate("Fecha creacion").toString());
+            v.setFechaCreacion(rs.getDate("Fecha_creacion").toString());
             v.setDuracion(rs.getTime("Duracion").toString());
             v.setReproducciones(rs.getInt("Reproducciones"));
             v.setDescripcion(rs.getString("Descripcion"));

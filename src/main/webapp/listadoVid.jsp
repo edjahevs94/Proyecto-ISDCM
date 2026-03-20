@@ -19,7 +19,7 @@
 
         <div class="container">
 
-            <!-- Usuario -->                    
+                               
             <div class="text-end mb-3">
 
                 <div class="dropdown d-inline-block">
@@ -40,7 +40,7 @@
 
             </div>
             
-            <!-- Header -->
+         
             <div class="d-flex justify-content-between align-items-center mb-4">
                 
                 <div>
@@ -55,7 +55,7 @@
                 
             </div>
 
-            <!-- Tabla -->
+          
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-body p-0">
                     <%

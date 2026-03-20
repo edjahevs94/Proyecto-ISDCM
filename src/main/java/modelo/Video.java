@@ -47,32 +47,70 @@ public class Video {
     public void setUsuarioId(int usuarioId) { 
         this.usuarioId = usuarioId;
     }
-    
-    public int getId(){ 
-        return id; 
+
+    public int getId() {
+        return id;
     }
-    public void setId(int id)                 { this.id = id; }
 
-    public String getTitulo()                 { return titulo; }
-    public void setTitulo(String titulo)      { this.titulo = titulo; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getAutor()                  { return autor; }
-    public void setAutor(String autor)        { this.autor = autor; }
+    public String getTitulo() {
+        return titulo;
+    }
 
-    public String getFechaCreacion()          { return fechaCreacion; }
-    public void setFechaCreacion(String f)    { this.fechaCreacion = f; }
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-    public String getDuracion()               { return duracion; }
-    public void setDuracion(String duracion)  { this.duracion = duracion; }
+    public String getAutor() {
+        return autor;
+    }
 
-    public int getReproducciones()            { return reproducciones; }
-    public void setReproducciones(int r)      { this.reproducciones = r; }
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
 
-    public String getDescripcion()            { return descripcion; }
-    public void setDescripcion(String d)      { this.descripcion = d; }
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
 
-    public String getFormato()                { return formato; }
-    public void setFormato(String formato)    { this.formato = formato; }
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
+    }
+
+    public int getReproducciones() {
+        return reproducciones;
+    }
+
+    public void setReproducciones(int reproducciones) {
+        this.reproducciones = reproducciones;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getFormato() {
+        return formato;
+    }
+
+    public void setFormato(String formato) {
+        this.formato = formato;
+    }
 
     public String getRutaFichero() {
         return rutaFichero;
@@ -81,6 +119,5 @@ public class Video {
     public void setRutaFichero(String rutaFichero) {
         this.rutaFichero = rutaFichero;
     }
-    
     
 }

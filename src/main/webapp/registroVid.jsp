@@ -42,7 +42,7 @@
 
     <div class="card border-0 shadow-sm rounded-3">
 
-        <!-- Header -->
+       
         <div class="card-header bg-primary text-white rounded-top-3 py-3">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-camera-video-fill fs-4"></i>
@@ -57,7 +57,7 @@
 
         <div class="card-body p-4">
 
-            <!-- Alerta error -->
+         
             <% if (request.getAttribute("error") != null) { %>
             <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
                 <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
@@ -65,7 +65,7 @@
             </div>
             <% } %>
 
-            <!-- Alerta éxito -->
+          
             <% if (request.getAttribute("exito") != null) { %>
             <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
                 <i class="bi bi-check-circle-fill flex-shrink-0"></i>
@@ -75,17 +75,17 @@
 
             <form action="servletRegistroVid" method="post" novalidate>
 
-                <!-- Título -->
+                
                 <div class="mb-3">
                     <label class="form-label fw-semibold small text-secondary">
                         Título <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" name="titulo"
-                           placeholder="Ej: Big Bunny"
+                           placeholder="Título del video"
                            value="${param.titulo}"/>
                 </div>
 
-                <!-- Autor + Fecha -->
+                
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
                         <label class="form-label fw-semibold small text-secondary">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                <!-- Duración + Reproducciones -->
+                
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
                         <label class="form-label fw-semibold small text-secondary">
@@ -146,7 +146,7 @@
                     </div>
                 </div>
 
-                <!-- Formato -->
+              
                 <div class="mb-3">
                     <label class="form-label fw-semibold small text-secondary">
                         Formato <span class="text-danger">*</span>
@@ -167,7 +167,7 @@
                     </div>
                 </div>
 
-                <!-- Descripción -->
+            
                 <div class="mb-4">
                     <label class="form-label fw-semibold small text-secondary">
                         Descripción <span class="text-danger">*</span>
@@ -184,7 +184,7 @@
                                 <i class="bi bi-link-45deg text-secondary"></i>
                             </span>
                             <input type="text" class="form-control" name="rutaFichero"
-                                   placeholder="Ej: /videos/mivideo.mp4 o https://..."
+                                   placeholder="Ingrese la ruta del fichero"
                                    value="${param.rutaFichero}"/>
                         </div>
                         <div class="form-text">Puede ser una ruta local o una URL externa.</div>

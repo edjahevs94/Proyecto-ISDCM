@@ -22,14 +22,14 @@ public class Servletregistrovid extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Verificar sesión activa
+        // verificar sesion activa
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
             response.sendRedirect("sessionExpirada.jsp");
             return;
         }
 
-        // Mostrar formulario de registro
+        // mostrar formulario de registro
         request.getRequestDispatcher("registroVid.jsp").forward(request, response);
     }
 
@@ -46,7 +46,6 @@ public class Servletregistrovid extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        // Recoger parámetros
         String titulo       = request.getParameter("titulo")       != null ? request.getParameter("titulo").trim()       : "";
         String autor        = request.getParameter("autor")        != null ? request.getParameter("autor").trim()        : "";
         String fecha        = request.getParameter("fechaCreacion")!= null ? request.getParameter("fechaCreacion").trim(): "";
@@ -58,7 +57,6 @@ public class Servletregistrovid extends HttpServlet {
 
         // --- Validaciones ---
 
-        // Campos obligatorios vacíos
         if (titulo.isEmpty() || autor.isEmpty() || fecha.isEmpty() ||
             duracion.isEmpty() || descripcion.isEmpty() || formato.isEmpty()) {
             request.setAttribute("error", "Todos los campos marcados con * son obligatorios.");
@@ -73,14 +71,12 @@ public class Servletregistrovid extends HttpServlet {
             return;
         }
 
-        // Formato duración HH:mm:ss
         if (!duracion.matches("\\d{2}:\\d{2}:\\d{2}")) {
             request.setAttribute("error", "Formato de duración incorrecto. Usa HH:mm:ss (ej: 01:30:00).");
             request.getRequestDispatcher("registroVid.jsp").forward(request, response);
             return;
         }
 
-        // Reproducciones debe ser número no negativo
         int reproducciones;
         try {
             reproducciones = Integer.parseInt(reproStr);
@@ -91,7 +87,6 @@ public class Servletregistrovid extends HttpServlet {
             return;
         }
         
-        // Validar formato de URL si se ha introducido (no es obligatorio)
         if (!rutaFichero.isEmpty()) {
             boolean esUrlValida = rutaFichero.startsWith("http://") 
                                || rutaFichero.startsWith("https://")
@@ -103,7 +98,7 @@ public class Servletregistrovid extends HttpServlet {
             }
         }
 
-        // Crear objeto Video y guardar
+       
         int usuarioId = (int) session.getAttribute("usuarioId");
         
         Video v = new Video(titulo, autor, fecha, duracion, reproducciones, descripcion, formato, rutaFichero);
@@ -111,7 +106,7 @@ public class Servletregistrovid extends HttpServlet {
         v.setUsuarioId(usuarioId);
         String errorDB = dao.insertarVideo(v);
 
-        if (errorDB != null) {
+        if (!(errorDB.equalsIgnoreCase("creado_exitosamente"))) {
             request.setAttribute("error", errorDB);
             request.getRequestDispatcher("registroVid.jsp").forward(request, response);
         } else {

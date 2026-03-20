@@ -42,18 +42,14 @@ public class ServletLogin extends HttpServlet {
                 UsuarioDAO usuarioDAO = new UsuarioDAO();
                 int usuarioId = usuarioDAO.getIdByUsername(username);
                 
-                    System.out.println("=== DEBUG LOGIN ===");
-    System.out.println("Username: " + username);
-    System.out.println("UsuarioId: " + usuarioId);
                 session.setAttribute("usuarioId", usuarioId);
 
-                // LOG TEMPORAL - debe aparecer en la consola de NetBeans
-
-    
-    session.setAttribute("usuarioId", usuarioId);
 
                 
-                session.setMaxInactiveInterval(120);
+                 session.setAttribute("usuarioId", usuarioId);
+
+                
+                session.setMaxInactiveInterval(1200);
                 response.sendRedirect("servletRegistroVid");
                 
             } else {
