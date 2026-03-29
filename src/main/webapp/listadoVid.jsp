@@ -42,17 +42,22 @@
             
          
             <div class="d-flex justify-content-between align-items-center mb-4">
-                
+
                 <div>
                     <h3 class="fw-bold mb-0">
                         <i class="bi bi-collection-play text-primary me-2"></i>Listado de Vídeos
                     </h3>
                 </div>
-                
-                <a href="servletRegistroVid" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-1"></i> Registrar vídeo
-                </a>
-                
+
+                <div class="d-flex gap-2">
+                    <a href="ServletBusqueda" class="btn btn-outline-primary">
+                        <i class="bi bi-search me-1"></i>Buscar
+                    </a>
+                    <a href="servletRegistroVid" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Registrar vídeo
+                    </a>
+                </div>
+
             </div>
 
           
@@ -105,7 +110,7 @@
                                         <i class="bi bi-stopwatch me-1"></i><%= v.getDuracion() %>
                                     </td>
                                     <td>
-                                        <span class="badge bg-secondary rounded-pill">
+                                        <span class="badge bg-primary rounded-pill">
                                             <i class="bi bi-play-fill me-1"></i><%= v.getReproducciones() %>
                                         </span>
                                     </td>
@@ -116,16 +121,12 @@
                                     </td>
                                     <td class="text-muted small"><%= v.getDescripcion() %></td>
     
-                                    <td class="text-muted small">  <%-- añade desde aquí --%>
+                                    <td class="text-muted small">
                                         <% if (v.getRutaFichero() != null && !v.getRutaFichero().isEmpty()) { %>
-                                        <% if (v.getRutaFichero().startsWith("http")) { %>
-                                        <a href="<%= v.getRutaFichero() %>" target="_blank" class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-play-circle me-1"></i>Ver vídeo
+                                        <a href="ServletReproducir?id=<%= v.getId() %>" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-play-circle me-1"></i>Reproducir
                                         </a>
                                         <% } else { %>
-                                        <span><i class="bi bi-folder2 me-1"></i><%= v.getRutaFichero() %></span>
-                                            <% } %>
-                                            <% } else { %>
                                         <span class="text-muted fst-italic">Sin ruta</span>
                                         <% } %>
                                     </td>  
