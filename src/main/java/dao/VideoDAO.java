@@ -90,4 +90,26 @@ public class VideoDAO {
     }
     return lista;
 }
+    public Video obtenerVideoPorId(int id) throws SQLException {
+    String sql = "SELECT * FROM VIDEOS WHERE ID = ?";
+    try (Connection con = ConexionBD.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Video v = new Video();
+            v.setId(rs.getInt("ID"));
+            v.setTitulo(rs.getString("Titulo"));
+            v.setAutor(rs.getString("Autor"));
+            v.setFechaCreacion(rs.getDate("Fecha_creacion").toString());
+            v.setDuracion(rs.getTime("Duracion").toString());
+            v.setReproducciones(rs.getInt("Reproducciones"));
+            v.setDescripcion(rs.getString("Descripcion"));
+            v.setFormato(rs.getString("Formato"));
+            v.setRutaFichero(rs.getString("RutaFichero"));
+            return v;
+        }
+        return null;
+    }
+}
 }
