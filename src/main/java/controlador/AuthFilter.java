@@ -24,7 +24,8 @@ public class AuthFilter implements Filter {
                             || uri.contains("servletLogin")
                             || uri.contains("css")
                             || uri.contains("js")
-                            || uri.contains("images");
+                            || uri.contains("images")
+                            || uri.contains("/api/");
 
         if (loggedIn || loginRequest) {
 

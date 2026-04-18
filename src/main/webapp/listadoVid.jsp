@@ -137,18 +137,16 @@
                                             )">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                    </td>
-                                    
-                                    <td class="text-muted small">
-                                        
+
                                         <% if (v.getRutaFichero() != null && !v.getRutaFichero().isEmpty()) { %>
-                                        <a href="ServletReproducir?id=<%= v.getId() %>" class="btn btn-outline-primary btn-sm">
+                                        <a href="ServletReproducir?id=<%= v.getId() %>" class="btn btn-outline-primary btn-sm ms-2">
                                             <i class="bi bi-play-circle me-1"></i>Reproducir
                                         </a>
                                         <% } else { %>
                                         <span class="text-muted fst-italic">Sin ruta</span>
                                         <% } %>
-                                    </td>  
+                                    </td>
+                                    
                                 </tr>
                                 <%
                                     }
