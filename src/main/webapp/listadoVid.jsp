@@ -89,7 +89,7 @@
                                     <th>Reproducciones</th>
                                     <th>Formato</th>
                                     <th>Descripción</th>
-                                    <th>Ruta/URL</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -121,7 +121,26 @@
                                     </td>
                                     <td class="text-muted small"><%= v.getDescripcion() %></td>
     
+                                    <td>
+                                        <button class="btn btn-warning btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalEditar"
+                                            onclick="cargarDatosEditar(
+                                                '<%= v.getId() %>',
+                                                '<%= v.getTitulo() %>',
+                                                '<%= v.getAutor() %>',
+                                                '<%= v.getFechaCreacion() %>',
+                                                '<%= v.getDuracion() %>',
+                                                '<%= v.getDescripcion() %>',
+                                                '<%= v.getFormato() %>',
+                                                '<%= v.getRutaFichero() %>'
+                                            )">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                    </td>
+                                    
                                     <td class="text-muted small">
+                                        
                                         <% if (v.getRutaFichero() != null && !v.getRutaFichero().isEmpty()) { %>
                                         <a href="ServletReproducir?id=<%= v.getId() %>" class="btn btn-outline-primary btn-sm">
                                             <i class="bi bi-play-circle me-1"></i>Reproducir
@@ -148,6 +167,138 @@
 
         </div>
 
+        <div class="modal fade" id="modalEditar">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <input type="hidden" id="editId"/>
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-pencil-square me-2 text-warning"></i>
+                            Editar Video
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="alert alert-info d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-info-circle"></i>
+                            Modifica los campos del vídeo y guarda los cambios.
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Título</label>
+                                <input type="text" id="editTitulo" class="form-control"/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Autor</label>
+                                <input type="text" id="editAutor" class="form-control"/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha</label>
+                                <input type="date" id="editFecha" class="form-control"/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Duración</label>
+                                <input type="text" id="editDuracion" class="form-control"/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Formato</label>
+                                <input type="text" id="editFormato" class="form-control"/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Ruta</label>
+                                <input type="text" id="editRuta" class="form-control"/>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Descripción</label>
+                                <textarea id="editDescripcion" class="form-control" rows="3"></textarea>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button class="btn btn-primary" onclick="actualizarVideo()">
+                            Guardar cambios
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+      
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <script>
+            function cargarDatosEditar(id, titulo, autor, fecha, duracion, descripcion, formato, ruta) {
+                document.getElementById("editId").value = id;
+                document.getElementById("editTitulo").value = titulo;
+                document.getElementById("editAutor").value = autor;
+                document.getElementById("editFecha").value = fecha;
+                document.getElementById("editDuracion").value = duracion;
+
+                document.getElementById("editDescripcion").value = descripcion;
+                document.getElementById("editFormato").value = formato;
+                document.getElementById("editRuta").value = ruta;
+            }
+            
+            function actualizarVideo() {
+
+                const id = document.getElementById("editId").value;
+
+                const video = {
+                    titulo: document.getElementById("editTitulo").value,
+                    autor: document.getElementById("editAutor").value,
+                    fechaCreacion: document.getElementById("editFecha").value,
+                    duracion: document.getElementById("editDuracion").value,
+                    reproducciones: 0,
+                    descripcion: document.getElementById("editDescripcion").value,
+                    formato: document.getElementById("editFormato").value,
+                    rutaFichero: document.getElementById("editRuta").value
+                };
+
+                fetch("api/videos/" + id, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(video)
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    alert(data.mensaje || "Video actualizado");
+
+                    // cerrar modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
+                    modal.hide();
+
+                    // recargar lista
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Error al actualizar el video");
+                });
+            }
+            
+        </script>
+        
     </body>
 </html>

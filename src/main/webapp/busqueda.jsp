@@ -112,10 +112,16 @@
 
                     <hr class="my-4"/>
 
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <button type="button" class="btn btn-secondary px-4 fw-semibold" onclick="limpiarFormulario()">
+                            <i class="bi bi-eraser me-1"></i>Limpiar
+                        </button>
+
                         <button type="submit" class="btn btn-primary px-4 fw-semibold">
                             <i class="bi bi-search me-1"></i>Buscar
                         </button>
+
                     </div>
 
                 </form>
@@ -232,6 +238,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error al parsear JSON:', e);
     }
 });
+
+function limpiarFormulario() {
+    document.querySelector('input[name="titulo"]').value = '';
+    document.querySelector('input[name="autor"]').value = '';
+    document.querySelector('input[name="fecha"]').value = '';
+}
+
 </script>
 
 </body>

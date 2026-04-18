@@ -22,35 +22,35 @@ public class Servletregistrovid extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // verificar sesion activa
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("usuario") == null) {
-            response.sendRedirect("sessionExpirada.jsp");
-            return;
-        }
-
-        // mostrar formulario de registro
-        request.getRequestDispatcher("registroVid.jsp").forward(request, response);
+    // verificar sesion activa
+    HttpSession session = request.getSession(false);
+    if (session == null || session.getAttribute("usuario") == null) {
+        response.sendRedirect("sessionExpirada.jsp");
+        return;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    // mostrar formulario de registro
+    request.getRequestDispatcher("registroVid.jsp").forward(request, response);
+}
 
-        // Verificar sesión activa
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
             response.sendRedirect("sessionExpirada.jsp");
             return;
         }
-
+        
+        // EL RESTO DEL CODIGO ES LA SEGUNDA FUNCIONALIDAD DE CREACION DE VIDEO
         request.setCharacterEncoding("UTF-8");
 
         String titulo       = request.getParameter("titulo")       != null ? request.getParameter("titulo").trim()       : "";
         String autor        = request.getParameter("autor")        != null ? request.getParameter("autor").trim()        : "";
         String fecha        = request.getParameter("fechaCreacion")!= null ? request.getParameter("fechaCreacion").trim(): "";
         String duracion     = request.getParameter("duracion")     != null ? request.getParameter("duracion").trim()     : "";
-        String reproStr     = request.getParameter("reproducciones")!= null? request.getParameter("reproducciones").trim(): "0";
+        String reproStr     = "0";
         String descripcion  = request.getParameter("descripcion")  != null ? request.getParameter("descripcion").trim()  : "";
         String formato      = request.getParameter("formato")      != null ? request.getParameter("formato").trim()      : "";
         String rutaFichero   = request.getParameter("rutaFichero")     != null ? request.getParameter("rutaFichero").trim()     : "";

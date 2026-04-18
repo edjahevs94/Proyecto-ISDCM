@@ -116,7 +116,7 @@
 
                 
                 <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label class="form-label fw-semibold small text-secondary">
                             Duración (HH:mm:ss) <span class="text-danger">*</span>
                         </label>
@@ -131,19 +131,7 @@
                         </div>
                         <div class="form-text">Formato: horas:minutos:segundos</div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold small text-secondary">
-                            Nº Reproducciones
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light">
-                                <i class="bi bi-play-circle text-secondary"></i>
-                            </span>
-                            <input type="number" class="form-control" name="reproducciones"
-                                   placeholder="0" min="0"
-                                   value="${param.reproducciones}"/>
-                        </div>
-                    </div>
+
                 </div>
 
               

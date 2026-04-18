@@ -19,11 +19,7 @@ import static util.ConexionBD.getConnection;
  * @author alumne
  */
 
-
-
-
 public class VideoDAO {
-
 
 
     public String insertarVideo(Video v) {
