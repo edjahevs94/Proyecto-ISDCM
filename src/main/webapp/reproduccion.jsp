@@ -95,6 +95,34 @@
 
 <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 <script src="js/reproducirVideo.js" defer></script>
+<script>
+    var player = videojs('miVideo', {
+        fluid: true,
+        playbackRates: [0.5, 1, 1.5, 2]
+    });
+
+    var reproduccionContada = false;
+    var BACKEND_URL = 'http://localhost:8080/Proyecto-ISDCM-Backend/api/videos/<%= idVideo %>/reproduccion';
+
+    player.on('play', function() {
+        if (!reproduccionContada) {
+            reproduccionContada = true;
+
+            console.log("Intentando actualizar en: " + BACKEND_URL);
+            fetch(BACKEND_URL, { method: 'POST' })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.estado === 'exito') {
+                        document.getElementById('contadorReproducciones').innerText = data.nuevo_contador;
+                        var alerta = document.getElementById('alertaReproduccion');
+                        alerta.classList.remove('d-none');
+                        setTimeout(function() { alerta.classList.add('d-none'); }, 3000);
+                    }
+                })
+                .catch(function(err) { console.log('Error registro:', err); });
+        }
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -258,47 +258,39 @@
                 document.getElementById("editRuta").value = ruta;
             }
             
-            function actualizarVideo() {
+           function actualizarVideo() {
+    const id = document.getElementById("editId").value;
 
-                const id = document.getElementById("editId").value;
+    const video = {
+        titulo: document.getElementById("editTitulo").value,
+        autor: document.getElementById("editAutor").value,
+        fechaCreacion: document.getElementById("editFecha").value,
+        duracion: document.getElementById("editDuracion").value,
+        reproducciones: 0,
+        descripcion: document.getElementById("editDescripcion").value,
+        formato: document.getElementById("editFormato").value,
+        rutaFichero: document.getElementById("editRuta").value
+    };
 
-                const video = {
-                    titulo: document.getElementById("editTitulo").value,
-                    autor: document.getElementById("editAutor").value,
-                    fechaCreacion: document.getElementById("editFecha").value,
-                    duracion: document.getElementById("editDuracion").value,
-                    reproducciones: 0,
-                    descripcion: document.getElementById("editDescripcion").value,
-                    formato: document.getElementById("editFormato").value,
-                    rutaFichero: document.getElementById("editRuta").value
-                };
-
-                fetch("api/videos/" + id, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(video)
-                })
-                .then(res => res.json())
-                .then(data => {
-
-                    alert(data.mensaje || "Video actualizado");
-
-                    // cerrar modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
-                    modal.hide();
-
-                    // recargar lista
-                    location.reload();
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert("Error al actualizar el video");
-                });
-            }
+    fetch("http://localhost:8080/Proyecto-ISDCM-Backend/api/videos/" + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(video)
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Error " + res.status);
+        return res.json();
+    })
+    .then(data => {
+        alert("Vídeo actualizado correctamente");
+        location.reload();
+    })
+    .catch(err => alert("Error: " + err.message));
+}
             
         </script>
-        
+
     </body>
 </html>
