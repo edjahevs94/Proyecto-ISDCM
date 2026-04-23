@@ -137,9 +137,7 @@
                                             )">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                    </td>
-                                    
-                                    <td class="text-muted small">
+                         
                                         
                                         <% if (v.getRutaFichero() != null && !v.getRutaFichero().isEmpty()) { %>
                                         <a href="ServletReproducir?id=<%= v.getId() %>" class="btn btn-outline-primary btn-sm">
