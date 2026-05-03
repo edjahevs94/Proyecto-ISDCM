@@ -16,7 +16,7 @@ public class ConexionBD {
         Connection conn = null;
         
         try{
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName("org.apache.derby.client.ClientAutoloadedDriver");
             conn = DriverManager.getConnection(URL, USER, PASS);
         }
         catch(Exception e){
