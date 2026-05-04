@@ -64,8 +64,8 @@ public class Servletregistrovid extends HttpServlet {
                 return;
             }
 
-            // Crear directorio videos si no existe
-            String dirPath = getServletContext().getRealPath("/videos/");
+            // Directorio fijo en el sistema de ficheros (getRealPath es null en GlassFish)
+            String dirPath = System.getProperty("user.home") + "/isdcm_videos/";
             File dir = new File(dirPath);
             if (!dir.exists()) dir.mkdirs();
 
@@ -75,7 +75,8 @@ public class Servletregistrovid extends HttpServlet {
                 Files.copy(is, Paths.get(dirPath, nombreGuardado), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            rutaFichero = request.getContextPath() + "/videos/" + nombreGuardado;
+            // URL servida por ServletVideo
+            rutaFichero = request.getContextPath() + "/video/" + nombreGuardado;
             // El formato se autodetecta de la extensión del fichero subido
             formato = extension;
         }
