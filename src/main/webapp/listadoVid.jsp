@@ -53,6 +53,9 @@
                     <a href="ServletBusqueda" class="btn btn-outline-primary">
                         <i class="bi bi-search me-1"></i>Buscar
                     </a>
+                    <a href="ServletCifradoContenido" class="btn btn-outline-secondary">
+                        <i class="bi bi-shield-lock me-1"></i>Cifrado
+                    </a>
                     <a href="servletRegistroVid" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-1"></i> Registrar vídeo
                     </a>
