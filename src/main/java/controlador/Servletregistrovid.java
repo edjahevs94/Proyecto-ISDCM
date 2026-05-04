@@ -14,7 +14,7 @@ import modelo.Video;
 import dao.VideoDAO;
 
 @WebServlet(name = "servletRegistroVid", urlPatterns = {"/servletRegistroVid"})
-@MultipartConfig(maxFileSize = 524288000) // 500 MB
+@MultipartConfig(location = "/tmp", maxFileSize = 524288000)
 public class Servletregistrovid extends HttpServlet {
 
     private static final java.util.Set<String> FORMATOS_VALIDOS =
