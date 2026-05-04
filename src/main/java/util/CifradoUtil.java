@@ -1,44 +1,63 @@
 package util;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.SecureRandom;
-import java.util.Arrays;
 
 public class CifradoUtil {
 
     private static final String ALGORITMO = "AES/CBC/PKCS5Padding";
-    // Clave AES de 16 bytes (128 bits)
     private static final byte[] CLAVE = "ISDCMSecretKey16".getBytes();
+    private static final int BUFFER = 8192;
 
-    public static byte[] cifrar(byte[] datos) throws Exception {
-        SecretKey clave = new SecretKeySpec(CLAVE, "AES");
-
-        // IV aleatorio de 16 bytes para cada cifrado
+    public static void cifrarStream(InputStream entrada, OutputStream salida) throws Exception {
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
 
-        Cipher cipher = Cipher.getInstance(ALGORITMO);
-        cipher.init(Cipher.ENCRYPT_MODE, clave, new IvParameterSpec(iv));
-        byte[] datosCifrados = cipher.doFinal(datos);
+        // El IV se escribe en claro al inicio del fichero cifrado
+        salida.write(iv);
 
-        // Concatenar IV + datos cifrados
-        byte[] resultado = new byte[iv.length + datosCifrados.length];
-        System.arraycopy(iv, 0, resultado, 0, iv.length);
-        System.arraycopy(datosCifrados, 0, resultado, iv.length, datosCifrados.length);
-        return resultado;
+        Cipher cipher = Cipher.getInstance(ALGORITMO);
+        cipher.init(Cipher.ENCRYPT_MODE,
+                new SecretKeySpec(CLAVE, "AES"),
+                new IvParameterSpec(iv));
+
+        try (CipherOutputStream cos = new CipherOutputStream(salida, cipher)) {
+            byte[] buf = new byte[BUFFER];
+            int leidos;
+            while ((leidos = entrada.read(buf)) != -1) {
+                cos.write(buf, 0, leidos);
+            }
+        }
     }
 
-    public static byte[] descifrar(byte[] datos) throws Exception {
-        // Los primeros 16 bytes son el IV
-        byte[] iv = Arrays.copyOfRange(datos, 0, 16);
-        byte[] datosCifrados = Arrays.copyOfRange(datos, 16, datos.length);
+    public static void descifrarStream(InputStream entrada, OutputStream salida) throws Exception {
+        // Leer los 16 bytes del IV del inicio del fichero
+        byte[] iv = new byte[16];
+        int total = 0;
+        while (total < 16) {
+            int n = entrada.read(iv, total, 16 - total);
+            if (n == -1) throw new Exception("Fichero inválido: no se encontró el IV.");
+            total += n;
+        }
 
-        SecretKey clave = new SecretKeySpec(CLAVE, "AES");
         Cipher cipher = Cipher.getInstance(ALGORITMO);
-        cipher.init(Cipher.DECRYPT_MODE, clave, new IvParameterSpec(iv));
-        return cipher.doFinal(datosCifrados);
+        cipher.init(Cipher.DECRYPT_MODE,
+                new SecretKeySpec(CLAVE, "AES"),
+                new IvParameterSpec(iv));
+
+        try (CipherInputStream cis = new CipherInputStream(entrada, cipher)) {
+            byte[] buf = new byte[BUFFER];
+            int leidos;
+            while ((leidos = cis.read(buf)) != -1) {
+                salida.write(buf, 0, leidos);
+            }
+        }
     }
 }

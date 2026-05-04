@@ -43,36 +43,30 @@ public class ServletCifradoContenido extends HttpServlet {
         }
 
         String nombreOriginal = obtenerNombreFichero(filePart);
-        byte[] datos;
-        try (InputStream is = filePart.getInputStream()) {
-            datos = is.readAllBytes();
-        }
-
-        byte[] resultado;
         String nombreSalida;
 
-        try {
-            if ("cifrar".equals(accion)) {
-                resultado = CifradoUtil.cifrar(datos);
-                nombreSalida = nombreOriginal + ".cifrado";
-            } else {
-                resultado = CifradoUtil.descifrar(datos);
-                if (nombreOriginal.endsWith(".cifrado")) {
-                    nombreSalida = nombreOriginal.substring(0, nombreOriginal.length() - 8);
-                } else {
-                    nombreSalida = nombreOriginal + ".descifrado";
-                }
-            }
-        } catch (Exception e) {
-            request.setAttribute("error", "Error al procesar el fichero: " + e.getMessage());
-            request.getRequestDispatcher("cifradoContenido.jsp").forward(request, response);
-            return;
+        if ("cifrar".equals(accion)) {
+            nombreSalida = nombreOriginal + ".cifrado";
+        } else {
+            nombreSalida = nombreOriginal.endsWith(".cifrado")
+                    ? nombreOriginal.substring(0, nombreOriginal.length() - 8)
+                    : nombreOriginal + ".descifrado";
         }
 
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreSalida + "\"");
-        response.setContentLength(resultado.length);
-        response.getOutputStream().write(resultado);
+
+        try (InputStream is = filePart.getInputStream()) {
+            if ("cifrar".equals(accion)) {
+                CifradoUtil.cifrarStream(is, response.getOutputStream());
+            } else {
+                CifradoUtil.descifrarStream(is, response.getOutputStream());
+            }
+        } catch (Exception e) {
+            // Si ya empezamos a escribir la respuesta no podemos redirigir,
+            // solo registramos el error en el log del servidor
+            log("Error al procesar fichero: " + e.getMessage(), e);
+        }
     }
 
     private String obtenerNombreFichero(Part part) {
@@ -80,9 +74,9 @@ public class ServletCifradoContenido extends HttpServlet {
         for (String token : cd.split(";")) {
             if (token.trim().startsWith("filename")) {
                 String nombre = token.substring(token.indexOf('=') + 1).trim().replace("\"", "");
-                return nombre.contains("/") ? nombre.substring(nombre.lastIndexOf('/') + 1)
-                                           : nombre.contains("\\") ? nombre.substring(nombre.lastIndexOf('\\') + 1)
-                                                                    : nombre;
+                if (nombre.contains("/"))  return nombre.substring(nombre.lastIndexOf('/') + 1);
+                if (nombre.contains("\\")) return nombre.substring(nombre.lastIndexOf('\\') + 1);
+                return nombre;
             }
         }
         return "fichero";
