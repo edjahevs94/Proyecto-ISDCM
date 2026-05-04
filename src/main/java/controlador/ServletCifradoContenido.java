@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @WebServlet(name = "ServletCifradoContenido", urlPatterns = {"/ServletCifradoContenido"})
-@MultipartConfig(location = "/tmp", maxFileSize = 104857600)
+@MultipartConfig(location = "/tmp", maxFileSize = -1, maxRequestSize = -1)
 public class ServletCifradoContenido extends HttpServlet {
 
     @Override
