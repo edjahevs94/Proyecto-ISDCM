@@ -27,6 +27,12 @@
             <artifactId>derbyclient</artifactId>
             <version>10.15.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.santuario</groupId>
+            <artifactId>xmlsec</artifactId>
+            <version>1.5.8</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     
     <build>

@@ -56,6 +56,9 @@
                     <a href="ServletCifradoContenido" class="btn btn-outline-secondary">
                         <i class="bi bi-shield-lock me-1"></i>Cifrado
                     </a>
+                    <a href="ServletCifradoXML" class="btn btn-outline-secondary">
+                        <i class="bi bi-file-earmark-code me-1"></i>Cifrado XML
+                    </a>
                     <a href="servletRegistroVid" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-1"></i> Registrar vídeo
                     </a>
