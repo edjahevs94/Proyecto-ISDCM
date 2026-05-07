@@ -9,37 +9,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
-<script>
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.has('error')) {
-        const error = params.get('error');
-        if (error) {
-            alert(error);
-        }
-    }
-
-    if (params.has('success')) {
-        const success = params.get('success');
-        if (success === 'usuario_creado') {
-            alert('Usuario registrado correctamente.');
-        }
-    }
-    
-    function validarPassword(){
-
-        var pass = document.getElementById("password").value;
-        var repeat = document.getElementById("repeatPassword").value;
-
-        if(pass !== repeat){
-            alert("Las contraseñas no coinciden");
-            return false;
-        }
-
-        return true;
-    }
-</script>
-
 </head>
 
     <body class="bg-light min-vh-100 d-flex align-items-center justify-content-center py-4">
@@ -49,28 +18,21 @@
     <div class="card border-0 shadow-sm rounded-3">
 
     <div class="card-header bg-primary text-white rounded-top-3 py-3">
-    <div class="d-flex align-items-center gap-2">
-    <i class="bi bi-person-plus-fill fs-4"></i>
-    <div>
-    <h4 class="mb-0 fw-bold">Registro de Usuario</h4>
-    <small class="opacity-75">Completa los datos para crear una cuenta</small>
-    </div>
-    </div>
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-plus-fill fs-4"></i>
+            <div>
+                <h4 class="mb-0 fw-bold">Registro de Usuario</h4>
+                <small class="opacity-75">Completa los datos para crear una cuenta</small>
+            </div>
+        </div>
     </div>
 
     <div class="card-body p-4">
 
     <% if (request.getAttribute("error") != null) { %>
     <div class="alert alert-danger d-flex align-items-center gap-2">
-    <i class="bi bi-exclamation-triangle-fill"></i>
-    <span>${error}</span>
-    </div>
-    <% } %>
-
-    <% if (request.getAttribute("exito") != null) { %>
-    <div class="alert alert-success d-flex align-items-center gap-2">
-    <i class="bi bi-check-circle-fill"></i>
-    <span>${exito}</span>
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span>${error}</span>
     </div>
     <% } %>
 
@@ -140,7 +102,7 @@
             <i class="bi bi-lock-fill"></i>
             </span>
             <input type="password" class="form-control"
-            id="repeatPassword" required>
+            id="repeatPassword" name="repeatPassword" required>
             </div>
         </div>
 

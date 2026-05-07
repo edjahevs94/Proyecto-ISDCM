@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import java.sql.Connection;
@@ -13,32 +9,23 @@ import util.ConexionBD;
 
 public class UsuarioDAO {
     
-    public boolean loginUsuario(String username, String password) throws SQLException{
-        
-        boolean res = false;
-           
-        try{
-            Connection conn = ConexionBD.getConnection();
-            String sql = "SELECT 1 WHERE username = ? AND password = ?";
-
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, username);
-            ps.setString(2, password);
-            
-            ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
-                res = true;
-            }
-        
-        
-        } catch(SQLException e){
-            e.printStackTrace();
+    public boolean loginUsuario(Usuario usuario) throws SQLException {
+    boolean res = false;
+    try(Connection conn = ConexionBD.getConnection()) {
+        String sql = "SELECT 1 FROM USUARIOS WHERE USERNAME = ? AND PASSWORD = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, usuario.getUserName());
+        ps.setString(2, usuario.getPassword());
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            res = true;
         }
-        
-        return res;
-        
+        conn.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return res;
+}
     
     public boolean insertarUsuario(Usuario usuario){
 
@@ -87,10 +74,10 @@ public class UsuarioDAO {
 
             while (rs.next()) {
                 if (email.equals(rs.getString("email"))) {
-                    resultado = "El Email ya esta en uso";
+                    resultado = "email";
                 }
                 if (username.equals(rs.getString("username"))) {
-                    resultado = "El Username ya esta en uso";
+                    resultado = "username";
                 }
             }
 
@@ -101,6 +88,20 @@ public class UsuarioDAO {
 
         return resultado;
     }
+    
+    
+    public int getIdByUsername(String username) throws SQLException {
+    String sql = "SELECT ID FROM USUARIOS WHERE USERNAME = ?";
+    try (Connection con = ConexionBD.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("ID");
+        }
+    }
+    return -1;
+}
     
     
 }

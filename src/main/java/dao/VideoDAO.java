@@ -1,0 +1,98 @@
+package dao;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import modelo.Video;
+import util.ConexionBD;
+import static util.ConexionBD.getConnection;
+
+public class VideoDAO {
+
+
+    public String insertarVideo(Video v) {
+        String sqlCheck = "SELECT ID FROM Videos WHERE Titulo = ? AND Autor = ?";
+        String sqlInsert = "INSERT INTO Videos (Titulo, Autor, Fecha_creacion, " +
+                   "Duracion, Reproducciones, Descripcion, Formato, RutaFichero, UsuarioId) " +
+                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = ConexionBD.getConnection();) {
+
+            PreparedStatement psCheck = con.prepareStatement(sqlCheck);
+            psCheck.setString(1, v.getTitulo());
+            psCheck.setString(2, v.getAutor());
+            ResultSet rs = psCheck.executeQuery();
+            if (rs.next()) {
+                return "Ya existe un vídeo con ese título y autor.";
+            }
+
+            PreparedStatement psInsert = con.prepareStatement(sqlInsert);
+            psInsert.setString(1, v.getTitulo());
+            psInsert.setString(2, v.getAutor());
+            psInsert.setDate(3, Date.valueOf(v.getFechaCreacion()));
+            psInsert.setTime(4, Time.valueOf(v.getDuracion()));
+            psInsert.setInt(5, v.getReproducciones());
+            psInsert.setString(6, v.getDescripcion());
+            psInsert.setString(7, v.getFormato());
+            psInsert.setString(8, v.getRutaFichero());
+            psInsert.setInt(9, v.getUsuarioId());
+            psInsert.executeUpdate();
+
+            return "creado_exitosamente"; 
+
+        } catch (SQLException e) {
+            return "Error en la base de datos: " + e.getMessage();
+        }
+    }
+
+    
+    public List<Video> listarVideos(int usuarioId) {
+    List<Video> lista = new ArrayList<>();
+    String sql = "SELECT * FROM Videos WHERE UsuarioId = ?";
+    try (Connection con = getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {  
+
+        ps.setInt(1, usuarioId);  
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Video v = new Video();
+            v.setId(rs.getInt("ID"));
+            v.setTitulo(rs.getString("Titulo"));
+            v.setAutor(rs.getString("Autor"));
+            v.setFechaCreacion(rs.getDate("Fecha_creacion").toString());
+            v.setDuracion(rs.getTime("Duracion").toString());
+            v.setReproducciones(rs.getInt("Reproducciones"));
+            v.setDescripcion(rs.getString("Descripcion"));
+            v.setFormato(rs.getString("Formato"));
+            v.setRutaFichero(rs.getString("RutaFichero"));
+            lista.add(v);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+    public Video obtenerVideoPorId(int id) throws SQLException {
+    String sql = "SELECT * FROM VIDEOS WHERE ID = ?";
+    try (Connection con = ConexionBD.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Video v = new Video();
+            v.setId(rs.getInt("ID"));
+            v.setTitulo(rs.getString("Titulo"));
+            v.setAutor(rs.getString("Autor"));
+            v.setFechaCreacion(rs.getDate("Fecha_creacion").toString());
+            v.setDuracion(rs.getTime("Duracion").toString());
+            v.setReproducciones(rs.getInt("Reproducciones"));
+            v.setDescripcion(rs.getString("Descripcion"));
+            v.setFormato(rs.getString("Formato"));
+            v.setRutaFichero(rs.getString("RutaFichero"));
+            return v;
+        }
+        return null;
+    }
+}
+}
