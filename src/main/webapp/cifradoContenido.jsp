@@ -30,7 +30,7 @@
             </div>
 
             <div class="d-flex align-items-center gap-2 mb-4">
-                <a href="ServletListadoVid" class="btn btn-outline-secondary btn-sm">
+                <a href="servletListadoVid" class="btn btn-outline-secondary btn-sm">
                     <i class="bi bi-arrow-left"></i>
                 </a>
                 <h3 class="fw-bold mb-0">
@@ -78,20 +78,6 @@
 
                     </form>
 
-                </div>
-            </div>
-
-            <div class="card border-0 shadow-sm rounded-3 mt-4">
-                <div class="card-body p-4">
-                    <h6 class="fw-semibold mb-3">
-                        <i class="bi bi-cpu text-secondary me-2"></i>Detalles técnicos
-                    </h6>
-                    <ul class="mb-0 text-muted small">
-                        <li>Algoritmo: <strong>AES/CBC/PKCS5Padding</strong></li>
-                        <li>Longitud de clave: <strong>128 bits</strong></li>
-                        <li>IV aleatorio de 16 bytes incluido en el fichero cifrado</li>
-                        <li>Librería: <strong>javax.crypto</strong> (JDK estándar)</li>
-                    </ul>
                 </div>
             </div>
 

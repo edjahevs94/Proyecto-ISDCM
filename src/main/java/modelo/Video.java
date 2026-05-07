@@ -1,20 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author alumne
- */
 public class Video {
 
     private int id;
     private String titulo;
     private String autor;
-    private String fechaCreacion;  // DATE  → String "yyyy-MM-dd"
-    private String duracion;       // TIME  → String "HH:mm:ss"
+    private String fechaCreacion;
+    private String duracion;
     private int reproducciones;
     private String descripcion;
     private String formato;
@@ -39,8 +31,6 @@ public class Video {
         this.rutaFichero = rutaFichero;
     }
 
-    // Getters y Setters
-    
     public int getUsuarioId() { 
         return usuarioId; 
     }

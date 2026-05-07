@@ -20,7 +20,6 @@ public class CifradoUtil {
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
 
-        // El IV se escribe en claro al inicio del fichero cifrado
         salida.write(iv);
 
         Cipher cipher = Cipher.getInstance(ALGORITMO);
@@ -38,7 +37,6 @@ public class CifradoUtil {
     }
 
     public static void descifrarStream(InputStream entrada, OutputStream salida) throws Exception {
-        // Leer los 16 bytes del IV del inicio del fichero
         byte[] iv = new byte[16];
         int total = 0;
         while (total < 16) {

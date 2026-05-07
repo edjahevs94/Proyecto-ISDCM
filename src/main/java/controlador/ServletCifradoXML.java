@@ -6,10 +6,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import util.CifradoXMLUtil;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "ServletCifradoXML", urlPatterns = {"/ServletCifradoXML"})
 @MultipartConfig(location = "/tmp", maxFileSize = -1, maxRequestSize = -1)
@@ -35,57 +35,64 @@ public class ServletCifradoXML extends HttpServlet {
             return;
         }
 
-        String accion       = request.getParameter("accion");
-        String origenXML    = request.getParameter("origenXML");   // "builtin" o "upload"
-        String tagElemento  = request.getParameter("tagElemento"); // puede estar vacío
-        String modoStr      = request.getParameter("modo");        // "elemento" o "contenido"
+        String accion      = request.getParameter("accion");
+        String tagElemento = request.getParameter("tagElemento");
+        String modoStr     = request.getParameter("modo");
+
+        Part filePart = request.getPart("ficheroXML");
+        if (filePart == null || filePart.getSize() == 0) {
+            error(request, response, "Debes seleccionar un fichero XML para " +
+                    ("cifrar".equals(accion) ? "cifrar." : "descifrar."));
+            return;
+        }
+
+        byte[] xmlBytes = filePart.getInputStream().readAllBytes();
+        boolean yaEncriptado = contieneEncryptedData(xmlBytes);
+
+        if ("cifrar".equals(accion) && yaEncriptado) {
+            error(request, response, "El documento ya está cifrado. Descífralo antes de volver a cifrarlo.");
+            return;
+        }
+        if ("descifrar".equals(accion) && !yaEncriptado) {
+            error(request, response, "El documento no está cifrado. No es posible descifrarlo.");
+            return;
+        }
+
+        String nombreOriginal = obtenerNombre(filePart);
+        String nombreSalida = "cifrar".equals(accion)
+                ? nombreOriginal + ".cifrado.xml"
+                : nombreOriginal.replace(".cifrado.xml", "") + ".descifrado.xml";
+
         boolean soloContenido = "contenido".equals(modoStr);
+        String tag = "documento".equals(modoStr) ? null : tagElemento;
 
-        String nombreSalida;
-        InputStream xmlInput = null;
-
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try {
-            // Obtener el XML de entrada
-            if ("builtin".equals(origenXML)) {
-                String rutaFichero = getServletContext().getRealPath("/xml/didlFilm1.xml");
-                if (rutaFichero != null) {
-                    xmlInput = Files.newInputStream(Paths.get(rutaFichero));
-                } else {
-                    xmlInput = getServletContext().getResourceAsStream("/xml/didlFilm1.xml");
-                }
-                nombreSalida = "cifrar".equals(accion) ? "didlFilm1.cifrado.xml" : "didlFilm1.descifrado.xml";
-            } else {
-                Part filePart = request.getPart("ficheroXML");
-                if (filePart == null || filePart.getSize() == 0) {
-                    request.setAttribute("error", "No se ha seleccionado ningún fichero XML.");
-                    request.getRequestDispatcher("cifradoXML.jsp").forward(request, response);
-                    return;
-                }
-                xmlInput = filePart.getInputStream();
-                String nombreOriginal = obtenerNombre(filePart);
-                nombreSalida = "cifrar".equals(accion)
-                        ? nombreOriginal + ".cifrado.xml"
-                        : nombreOriginal.replace(".cifrado.xml", "") + ".descifrado.xml";
-            }
-
-            response.setContentType("application/xml");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreSalida + "\"");
-
             if ("cifrar".equals(accion)) {
-                CifradoXMLUtil.cifrar(xmlInput, response.getOutputStream(), tagElemento, soloContenido);
+                CifradoXMLUtil.cifrar(new ByteArrayInputStream(xmlBytes), buffer, tag, soloContenido);
             } else {
-                CifradoXMLUtil.descifrar(xmlInput, response.getOutputStream());
+                CifradoXMLUtil.descifrar(new ByteArrayInputStream(xmlBytes), buffer);
             }
-
         } catch (Exception e) {
             log("Error en cifrado XML: " + e.getMessage(), e);
-            if (!response.isCommitted()) {
-                request.setAttribute("error", "Error al procesar el XML: " + e.getMessage());
-                request.getRequestDispatcher("cifradoXML.jsp").forward(request, response);
-            }
-        } finally {
-            if (xmlInput != null) try { xmlInput.close(); } catch (IOException ignored) {}
+            error(request, response, "Error al procesar el XML: " + e.getMessage());
+            return;
         }
+
+        response.setContentType("application/xml");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreSalida + "\"");
+        response.setContentLength(buffer.size());
+        buffer.writeTo(response.getOutputStream());
+    }
+
+    private void error(HttpServletRequest req, HttpServletResponse res, String msg)
+            throws ServletException, IOException {
+        req.setAttribute("error", msg);
+        req.getRequestDispatcher("cifradoXML.jsp").forward(req, res);
+    }
+
+    private boolean contieneEncryptedData(byte[] xmlBytes) {
+        return new String(xmlBytes, StandardCharsets.UTF_8).contains("EncryptedData");
     }
 
     private String obtenerNombre(Part part) {

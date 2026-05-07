@@ -51,7 +51,6 @@ public class Servletregistrovid extends HttpServlet {
         String formato     = param(request, "formato");
         String rutaFichero = param(request, "rutaFichero");
 
-        // Intentar procesar fichero subido
         Part filePart = request.getPart("ficheroVideo");
         if (filePart != null && filePart.getSize() > 0) {
             String nombreOriginal = obtenerNombreFichero(filePart);
@@ -64,24 +63,19 @@ public class Servletregistrovid extends HttpServlet {
                 return;
             }
 
-            // Directorio fijo en el sistema de ficheros (getRealPath es null en GlassFish)
             String dirPath = System.getProperty("user.home") + "/isdcm_videos/";
             File dir = new File(dirPath);
             if (!dir.exists()) dir.mkdirs();
 
-            // Nombre único para evitar colisiones
             String nombreGuardado = System.currentTimeMillis() + "_" + nombreOriginal;
             try (InputStream is = filePart.getInputStream()) {
                 Files.copy(is, Paths.get(dirPath, nombreGuardado), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            // URL servida por ServletVideo
             rutaFichero = request.getContextPath() + "/video/" + nombreGuardado;
-            // El formato se autodetecta de la extensión del fichero subido
             formato = extension;
         }
 
-        // Validaciones campos obligatorios
         if (titulo.isEmpty() || autor.isEmpty() || fecha.isEmpty() ||
                 duracion.isEmpty() || descripcion.isEmpty() || formato.isEmpty()) {
             request.setAttribute("error", "Todos los campos marcados con * son obligatorios.");
@@ -101,7 +95,6 @@ public class Servletregistrovid extends HttpServlet {
             return;
         }
 
-        // Validar ruta externa si se introdujo manualmente (no vino de subida)
         if (filePart == null || filePart.getSize() == 0) {
             if (!rutaFichero.isEmpty()) {
                 boolean valida = rutaFichero.startsWith("http://")

@@ -1,14 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controlador;
-
-/**
- *
- * @author alumne
- */
-
 
 import dao.VideoDAO;
 import jakarta.servlet.ServletException;
@@ -26,14 +16,12 @@ public class ServletListadoVid extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Verificar sesión activa
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
             response.sendRedirect("sessionExpirada.jsp");
             return;
         }
         int usuarioId = (int) session.getAttribute("usuarioId");
-        // Obtener lista de vídeos y pasar a la vista
         VideoDAO dao = new VideoDAO();
         List<Video> lista = dao.listarVideos(usuarioId);
         request.setAttribute("videos", lista);

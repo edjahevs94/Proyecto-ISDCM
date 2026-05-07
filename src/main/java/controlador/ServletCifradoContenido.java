@@ -6,8 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import util.CifradoUtil;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 @WebServlet(name = "ServletCifradoContenido", urlPatterns = {"/ServletCifradoContenido"})
 @MultipartConfig(location = "/tmp", maxFileSize = -1, maxRequestSize = -1)
@@ -37,36 +38,51 @@ public class ServletCifradoContenido extends HttpServlet {
         Part filePart = request.getPart("fichero");
 
         if (filePart == null || filePart.getSize() == 0) {
-            request.setAttribute("error", "No se ha seleccionado ningún fichero.");
-            request.getRequestDispatcher("cifradoContenido.jsp").forward(request, response);
+            error(request, response, "No se ha seleccionado ningún fichero.");
             return;
         }
 
         String nombreOriginal = obtenerNombreFichero(filePart);
-        String nombreSalida;
+        boolean yaEstaEncriptado = nombreOriginal.endsWith(".cifrado");
 
-        if ("cifrar".equals(accion)) {
-            nombreSalida = nombreOriginal + ".cifrado";
-        } else {
-            nombreSalida = nombreOriginal.endsWith(".cifrado")
-                    ? nombreOriginal.substring(0, nombreOriginal.length() - 8)
-                    : nombreOriginal + ".descifrado";
+        if ("cifrar".equals(accion) && yaEstaEncriptado) {
+            error(request, response, "El fichero ya está cifrado. No se puede cifrar de nuevo.");
+            return;
+        }
+        if ("descifrar".equals(accion) && !yaEstaEncriptado) {
+            error(request, response, "El fichero no está cifrado. Solo se pueden descifrar ficheros con extensión .cifrado.");
+            return;
+        }
+
+        String nombreSalida = "cifrar".equals(accion)
+                ? nombreOriginal + ".cifrado"
+                : nombreOriginal.substring(0, nombreOriginal.length() - 8);
+
+        byte[] inputBytes = filePart.getInputStream().readAllBytes();
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        try {
+            if ("cifrar".equals(accion)) {
+                CifradoUtil.cifrarStream(new ByteArrayInputStream(inputBytes), buffer);
+            } else {
+                CifradoUtil.descifrarStream(new ByteArrayInputStream(inputBytes), buffer);
+            }
+        } catch (Exception e) {
+            log("Error al procesar fichero: " + e.getMessage(), e);
+            error(request, response, "Error al procesar el fichero. Asegúrate de que el fichero es válido y no está corrupto.");
+            return;
         }
 
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreSalida + "\"");
+        response.setContentLength(buffer.size());
+        buffer.writeTo(response.getOutputStream());
+    }
 
-        try (InputStream is = filePart.getInputStream()) {
-            if ("cifrar".equals(accion)) {
-                CifradoUtil.cifrarStream(is, response.getOutputStream());
-            } else {
-                CifradoUtil.descifrarStream(is, response.getOutputStream());
-            }
-        } catch (Exception e) {
-            // Si ya empezamos a escribir la respuesta no podemos redirigir,
-            // solo registramos el error en el log del servidor
-            log("Error al procesar fichero: " + e.getMessage(), e);
-        }
+    private void error(HttpServletRequest req, HttpServletResponse res, String msg)
+            throws ServletException, IOException {
+        req.setAttribute("error", msg);
+        req.getRequestDispatcher("cifradoContenido.jsp").forward(req, res);
     }
 
     private String obtenerNombreFichero(Part part) {

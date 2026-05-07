@@ -1,29 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
-/**
- *
- * @author alumne
- */
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import modelo.Video;
 import util.ConexionBD;
 import static util.ConexionBD.getConnection;
-/**
- *
- * @author alumne
- */
 
 public class VideoDAO {
 
 
     public String insertarVideo(Video v) {
-        // comprobar si ya existe un vídeo con el mismo título y autor
         String sqlCheck = "SELECT ID FROM Videos WHERE Titulo = ? AND Autor = ?";
         String sqlInsert = "INSERT INTO Videos (Titulo, Autor, Fecha_creacion, " +
                    "Duracion, Reproducciones, Descripcion, Formato, RutaFichero, UsuarioId) " +

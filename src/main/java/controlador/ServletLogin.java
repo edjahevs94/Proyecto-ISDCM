@@ -30,14 +30,12 @@ public class ServletLogin extends HttpServlet {
                 
                 HttpSession session = request.getSession();
                 
-                // Guardar usuario en sesión (CLAVE para el filtro)
                 session.setAttribute("usuario", username);
 
                 UsuarioDAO usuarioDAO = new UsuarioDAO();
                 int usuarioId = usuarioDAO.getIdByUsername(username);
                 session.setAttribute("usuarioId", usuarioId);
 
-                // ⏱️ 2 minutos (NO 1200)
                 session.setMaxInactiveInterval(120);
 
                 response.sendRedirect("servletRegistroVid");

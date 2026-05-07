@@ -22,7 +22,6 @@ public class ServletVideo extends HttpServlet {
             return;
         }
 
-        // Evitar path traversal
         String filename = new File(pathInfo.substring(1)).getName();
         File file = new File(VIDEOS_DIR + filename);
 
@@ -46,7 +45,6 @@ public class ServletVideo extends HttpServlet {
                 is.transferTo(response.getOutputStream());
             }
         } else {
-            // Soporte Range para seeking en el reproductor
             String[] ranges = rangeHeader.replace("bytes=", "").split("-");
             long start = Long.parseLong(ranges[0]);
             long end = (ranges.length > 1 && !ranges[1].isEmpty())

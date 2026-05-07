@@ -1,6 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
 package controlador;
 
 import jakarta.servlet.ServletException;
@@ -13,13 +10,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.net.HttpURLConnection;
 
-/**
- * Servlet único para búsquedas - consume el servicio REST
- *
- * GET /ServletBusqueda?titulo=X&autor=Y&fecha=Z
- *
- * @author alumne
- */
 @WebServlet(name = "ServletBusqueda", urlPatterns = {"/ServletBusqueda"})
 public class ServletBusqueda extends HttpServlet {
 
@@ -41,7 +31,6 @@ public class ServletBusqueda extends HttpServlet {
         String autor = request.getParameter("autor");
         String fecha = request.getParameter("fecha");
 
-        // Construir URL con parámetros
         StringBuilder url = new StringBuilder(BACKEND_URL);
         url.append("?");
 
@@ -55,12 +44,10 @@ public class ServletBusqueda extends HttpServlet {
             url.append("fecha=").append(URLEncoder.encode(fecha, "UTF-8")).append("&");
         }
 
-        // Quitar último & si existe
         if (url.charAt(url.length() - 1) == '&') {
             url.deleteCharAt(url.length() - 1);
         }
 
-        // Ejecutar petición al servicio REST
         String jsonResultados = ejecutarGet(url.toString());
 
         request.setAttribute("titulo", titulo != null ? titulo : "");
