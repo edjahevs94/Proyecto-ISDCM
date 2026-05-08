@@ -48,7 +48,8 @@ public class ServletBusqueda extends HttpServlet {
             url.deleteCharAt(url.length() - 1);
         }
 
-        String jsonResultados = ejecutarGet(url.toString());
+        String token = (String) session.getAttribute("jwtToken");
+        String jsonResultados = ejecutarGet(url.toString(), token);
 
         request.setAttribute("titulo", titulo != null ? titulo : "");
         request.setAttribute("autor", autor != null ? autor : "");
@@ -64,16 +65,19 @@ public class ServletBusqueda extends HttpServlet {
         doGet(request, response);
     }
 
-    private String ejecutarGet(String url) {
+    private String ejecutarGet(String url, String token) {
         try {
             java.net.URI uri = new java.net.URI(url);
             java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
-            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+            java.net.http.HttpRequest.Builder builder = java.net.http.HttpRequest.newBuilder()
                     .uri(uri)
-                    .GET()
-                    .build();
+                    .GET();
 
-            java.net.http.HttpResponse<String> respuesta = client.send(request,
+            if (token != null && !token.isEmpty()) {
+                builder.header("Authorization", "Bearer " + token);
+            }
+
+            java.net.http.HttpResponse<String> respuesta = client.send(builder.build(),
                     java.net.http.HttpResponse.BodyHandlers.ofString());
             return respuesta.body();
         } catch (Exception e) {

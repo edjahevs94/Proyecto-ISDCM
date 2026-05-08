@@ -6,9 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import util.CifradoUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @WebServlet(name = "ServletCifradoContenido", urlPatterns = {"/ServletCifradoContenido"})
 @MultipartConfig(location = "/tmp", maxFileSize = -1, maxRequestSize = -1)
@@ -58,25 +57,22 @@ public class ServletCifradoContenido extends HttpServlet {
                 ? nombreOriginal + ".cifrado"
                 : nombreOriginal.substring(0, nombreOriginal.length() - 8);
 
-        byte[] inputBytes = filePart.getInputStream().readAllBytes();
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreSalida + "\"");
 
-        try {
+        try (InputStream entrada = filePart.getInputStream()) {
             if ("cifrar".equals(accion)) {
-                CifradoUtil.cifrarStream(new ByteArrayInputStream(inputBytes), buffer);
+                CifradoUtil.cifrarStream(entrada, response.getOutputStream());
             } else {
-                CifradoUtil.descifrarStream(new ByteArrayInputStream(inputBytes), buffer);
+                CifradoUtil.descifrarStream(entrada, response.getOutputStream());
             }
         } catch (Exception e) {
             log("Error al procesar fichero: " + e.getMessage(), e);
-            error(request, response, "Error al procesar el fichero. Asegúrate de que el fichero es válido y no está corrupto.");
-            return;
+            if (!response.isCommitted()) {
+                response.reset();
+                error(request, response, "Error al procesar el fichero. Asegúrate de que el fichero es válido y no está corrupto.");
+            }
         }
-
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreSalida + "\"");
-        response.setContentLength(buffer.size());
-        buffer.writeTo(response.getOutputStream());
     }
 
     private void error(HttpServletRequest req, HttpServletResponse res, String msg)

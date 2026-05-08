@@ -49,10 +49,12 @@ public class ServletLogin extends HttpServlet {
 
                 int id = extraerInt(respuesta, "id");
                 String usernameRespuesta = extraerString(respuesta, "username");
+                String token = extraerString(respuesta, "token");
 
                 HttpSession session = request.getSession();
                 session.setAttribute("usuario", usernameRespuesta);
                 session.setAttribute("usuarioId", id);
+                session.setAttribute("jwtToken", token);
                 session.setMaxInactiveInterval(120);
 
                 response.sendRedirect("servletRegistroVid");

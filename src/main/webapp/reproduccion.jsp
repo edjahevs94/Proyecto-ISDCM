@@ -3,6 +3,7 @@
 <%
     Video video = (Video) request.getAttribute("video");
     String usuario = (String) session.getAttribute("usuario");
+    String jwtToken = (String) session.getAttribute("jwtToken");
 
     String titulo       = (video != null) ? video.getTitulo()      : "Vídeo no encontrado";
     String autor        = (video != null) ? video.getAutor()       : "Desconocido";
@@ -103,13 +104,17 @@
 
     var reproduccionContada = false;
     var BACKEND_URL = 'http://localhost:8080/Proyecto-ISDCM-Backend/api/videos/<%= idVideo %>/reproduccion';
+    var JWT_TOKEN = '<%= jwtToken != null ? jwtToken : "" %>';
 
     player.on('play', function() {
         if (!reproduccionContada) {
             reproduccionContada = true;
 
             console.log("Intentando actualizar en: " + BACKEND_URL);
-            fetch(BACKEND_URL, { method: 'POST' })
+            fetch(BACKEND_URL, {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + JWT_TOKEN }
+            })
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
                     if (data.estado === 'exito') {

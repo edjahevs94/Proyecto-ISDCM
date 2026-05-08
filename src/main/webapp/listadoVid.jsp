@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List, modelo.Video" %>
+<% String jwtToken = (String) session.getAttribute("jwtToken"); %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -276,10 +277,12 @@
         rutaFichero: document.getElementById("editRuta").value
     };
 
+    var JWT_TOKEN = '<%= jwtToken != null ? jwtToken : "" %>';
     fetch("http://localhost:8080/Proyecto-ISDCM-Backend/api/videos/" + id, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + JWT_TOKEN
         },
         body: JSON.stringify(video)
     })
