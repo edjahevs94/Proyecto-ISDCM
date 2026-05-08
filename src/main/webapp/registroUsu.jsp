@@ -128,6 +128,17 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validarPassword() {
+            const p1 = document.getElementById('password').value;
+            const p2 = document.getElementById('repeatPassword').value;
+            if (p1 !== p2) {
+                alert('Las contraseñas no coinciden.');
+                return false;
+            }
+            return true;
+        }
+    </script>
 
     </body>
 </html>

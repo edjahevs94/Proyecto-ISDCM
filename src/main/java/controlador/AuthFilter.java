@@ -20,8 +20,11 @@ public class AuthFilter implements Filter {
         boolean loggedIn = (session != null && session.getAttribute("usuario") != null);
         String uri = request.getRequestURI();
 
-        boolean loginRequest = uri.contains("login.jsp") 
+        boolean loginRequest = uri.contains("login.jsp")
                             || uri.contains("servletLogin")
+                            || uri.contains("registroUsu.jsp")
+                            || uri.contains("servletUsuarios")
+                            || uri.contains("registroExitoso.jsp")
                             || uri.contains("css")
                             || uri.contains("js")
                             || uri.contains("images");
